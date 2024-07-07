@@ -14,7 +14,7 @@ spec:
         app.kubernetes.io/name: app-todoapp
     spec:
       containers:
-      - image: yashgangwar123/todo-app-efk:tagname
+      - image: yashgangwar123/todo-app-efk:latest
         imagePullPolicy: Always
         name: todoapp
         ports:
