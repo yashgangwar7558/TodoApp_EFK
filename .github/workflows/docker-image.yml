@@ -30,3 +30,17 @@ jobs:
           context: .
           push: true
           tags: yashgangwar123/todo-app-efk:latest
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v1
+        with:
+          version: 'v1.18.0'
+
+      - name: Update EKS deployment
+        run: |
+          aws eks --region us-east-1 update-kubeconfig --name todo-app-efk
+          kubectl set image deployment/deployment-todoapp todoapp=yashgangwar123/todo-app-efk:latest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
