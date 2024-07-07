@@ -28,7 +28,7 @@ export default function Signup() {
                 window.M.toast({ html: err.message, classes: "red" })
             }
         } else {
-            window.M.toast({ html: "Password and confirm password are not same", classes: "red" })
+            window.M.toast({ html: "Password and Confirm password are not same", classes: "red" })
         }
     }
 
