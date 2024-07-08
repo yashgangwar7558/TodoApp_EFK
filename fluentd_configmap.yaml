@@ -22,9 +22,22 @@ data:
       @type kubernetes_metadata
     </filter>
 
+    <filter kubernetes.**>
+      @type parser
+      key_name log
+      <parse>
+        @type json
+        time_key time
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        # Add some flexibility with json parsing
+        json_parser_of json
+        json_parser_of log json
+      </parse>
+    </filter>
+
     <match kubernetes.**>
       @type elasticsearch
-      @log_level info
+      @log_level debug
       include_tag_key true
       host "#{ENV['FLUENT_ELASTICSEARCH_HOST']}"
       port "#{ENV['FLUENT_ELASTICSEARCH_PORT']}"
