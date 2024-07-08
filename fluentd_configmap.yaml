@@ -12,15 +12,7 @@ data:
       pos_file /var/log/es-containers.log.pos
       tag kubernetes.*
       <parse>
-        @type multi_format
-        <pattern>
-          format json
-          time_key time
-          time_format %Y-%m-%dT%H:%M:%S.%NZ
-        </pattern>
-        <pattern>
-          format none
-        </pattern>
+        @type none
       </parse>
     </source>
 
@@ -37,6 +29,11 @@ data:
           format json
           time_key time
           time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format regexp
+          expression /^(?<time>[^ ]+ [^ ]+) (?<stream>[^ ]+) (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
         </pattern>
         <pattern>
           format none
