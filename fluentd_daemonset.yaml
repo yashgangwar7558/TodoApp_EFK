@@ -41,8 +41,8 @@ roleRef:
   kind: ClusterRole
   name: fluentd
   apiGroup: ""
-apiVersion: apps/v1
 ---
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluentd
