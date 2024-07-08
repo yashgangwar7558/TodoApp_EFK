@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-config
+  namespace: todoapp
+data:
+  fluent.conf: |
+    <source>
+      @type tail
+      path /var/log/containers/*.log
+      pos_file /var/log/fluentd-containers.log.pos
+      tag kubernetes.*
+      <parse>
+        @type json
+      </parse>
+    </source>
+
+    <filter kubernetes.**>
+      @type kubernetes_metadata
+    </filter>
+
+    <match **>
+      @type elasticsearch
+      host es-cluster
+      port 9200
+      logstash_format true
+      logstash_prefix kubernetes
+      logstash_dateformat %Y.%m.%d
+      include_tag_key true
+      type_name access_log
+      flush_interval 5s
+    </match>
