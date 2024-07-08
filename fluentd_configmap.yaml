@@ -12,9 +12,15 @@ data:
       pos_file /var/log/es-containers.log.pos
       tag kubernetes.*
       <parse>
-        @type json
-        time_key time
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        @type multi_format
+        <pattern>
+          format json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format none
+        </pattern>
       </parse>
     </source>
 
@@ -26,12 +32,15 @@ data:
       @type parser
       key_name log
       <parse>
-        @type json
-        time_key time
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
-        # Add some flexibility with json parsing
-        json_parser_of json
-        json_parser_of log json
+        @type multi_format
+        <pattern>
+          format json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format none
+        </pattern>
       </parse>
     </filter>
 
