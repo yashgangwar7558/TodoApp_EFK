@@ -7,26 +7,42 @@ data:
   fluent.conf: |
     <source>
       @type tail
+      @id in_tail_container_logs
       path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
+      pos_file /var/log/es-containers.log.pos
       tag kubernetes.*
       <parse>
-        @type json
+        @type multi_format
+        <pattern>
+          format json
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+        </pattern>
+        <pattern>
+          format /^(?<time>[^ ]+ [^ ]+) (?<stream>stdout|stderr) (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N
+        </pattern>
       </parse>
     </source>
 
     <filter kubernetes.**>
-      @type kubernetes_metadata
+      @type record_transformer
+      enable_ruby
+      <record>
+        time ${Time.now.strftime('%Y-%m-%dT%H:%M:%S.%NZ')}
+      </record>
     </filter>
 
     <match **>
       @type elasticsearch
-      host es-cluster
+      @log_level info
+      include_tag_key true
+      host "es-cluster"
       port 9200
       logstash_format true
-      logstash_prefix kubernetes
+      logstash_prefix fluentd
       logstash_dateformat %Y.%m.%d
-      include_tag_key true
-      type_name access_log
-      flush_interval 5s
+      type_name _doc
+      <buffer>
+        flush_interval 10s
+      </buffer>
     </match>
