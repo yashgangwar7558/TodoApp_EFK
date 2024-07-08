@@ -14,6 +14,8 @@ spec:
       labels:
         app: elasticsearch
     spec:
+      nodeSelector:
+        nodegroup: standard-workers
       containers:
       - name: elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:7.13.4
