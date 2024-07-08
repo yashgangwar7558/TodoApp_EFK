@@ -19,7 +19,7 @@ spec:
         ports:
         - containerPort: 5601
         env:
-        - name: ELASTICSEARCH_URL
+        - name: ELASTICSEARCH_HOSTS
           value: http://es-cluster:9200
 ---
 apiVersion: v1
