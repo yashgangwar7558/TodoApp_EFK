@@ -14,11 +14,9 @@ spec:
         app.kubernetes.io/name: app-todoapp
     spec:
       containers:
-      - image: yashgangwar123/wisecow:latest # public.ecr.aws/l6m2t8p7/docker-2048:latest # yashgangwar123/todo-app-efk:latest
+      - image: public.ecr.aws/l6m2t8p7/docker-2048:latest # public.ecr.aws/l6m2t8p7/docker-2048:latest # yashgangwar123/todo-app-efk:latest
         imagePullPolicy: Always
         name: todoapp
         ports:
-        - containerPort: 4499
-        env:
-        - name: SRVPORT
-          value: "4499"
+        - containerPort: 80
+        
