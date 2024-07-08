@@ -1,28 +1,48 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+apiVersion: v1
+kind: ServiceAccount
 metadata:
+  name: fluentd
   namespace: efklog
-  name: fluentd-metadata-reader
-rules:
-- apiGroups: [""]
-  resources: ["namespaces"]
-  verbs: ["get", "list"]
+  labels:
+    k8s-app: fluentd
+    addonmanager.kubernetes.io/mode: Reconcile
 ---
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
 metadata:
-  namespace: efklog
-  name: fluentd-metadata-reader-binding
+  name: fluentd
+  labels:
+    k8s-app: fluentd
+    addonmanager.kubernetes.io/mode: Reconcile
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - "namespaces"
+  - "pods"
+  verbs:
+  - "get"
+  - "watch"
+  - "list"
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: fluentd
+  labels:
+    k8s-app: fluentd
+    addonmanager.kubernetes.io/mode: Reconcile
 subjects:
 - kind: ServiceAccount
-  name: default
+  name: fluentd
   namespace: efklog
+  apiGroup: ""
 roleRef:
-  kind: Role
-  name: fluentd-metadata-reader
-  apiGroup: rbac.authorization.k8s.io
----
+  kind: ClusterRole
+  name: fluentd
+  apiGroup: ""
 apiVersion: apps/v1
+---
 kind: DaemonSet
 metadata:
   name: fluentd
