@@ -27,17 +27,23 @@ spec:
         env:
         - name: discovery.type
           value: "single-node"
+        # volumeMounts:
+        # - name: storage
+        #   mountPath: /usr/share/elasticsearch/data
         volumeMounts:
-        - name: storage
+        - name: elasticsearch-data
           mountPath: /usr/share/elasticsearch/data
-  volumeClaimTemplates:
-  - metadata:
-      name: storage
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 10Gi
+      volumes:
+        - name: elasticsearch-data
+          emptyDir: {}
+  # volumeClaimTemplates:
+  # - metadata:
+  #     name: storage
+  #   spec:
+  #     accessModes: [ "ReadWriteOnce" ]
+  #     resources:
+  #       requests:
+  #         storage: 10Gi
 
 ---
 apiVersion: v1
