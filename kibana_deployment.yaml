@@ -21,6 +21,10 @@ spec:
         env:
         - name: ELASTICSEARCH_HOSTS
           value: http://es-cluster:9200
+        - name: SERVER_BASEPATH
+          value: "/kibana"
+        - name: SERVER_REWRITEBASEPATH
+          value: "true"
 ---
 apiVersion: v1
 kind: Service
